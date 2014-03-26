@@ -37,9 +37,8 @@ class NodeJsView extends ScrollView
       line = $(e.target).data('line')
       file = $(e.target).data('file')
       console.log(file)
-      file = "#{atom.project.getPath()}/#{file}"
 
-      promise = atom.workspace.open(file, { searchAllPanes: true, initialLine: line })
+      promise = atom.workspace.open(file, { searchAllPanes: true, split: 'left', initialLine: line })
       promise.done (editor) ->
         editor.setCursorBufferPosition([line-1, 0])
 
@@ -64,9 +63,8 @@ class NodeJsView extends ScrollView
     terminal.stdin.write("exit\n")
 
   addOutput: (output) =>
-
     output = "#{output}"
-    output = output.replace /([^\s]*:[0-9]+)/g, (match) ->
+    output = output.replace /([^\s,\(]*:[0-9]+)/g, (match) ->
       file = match.split(":")[0]
       line = match.split(":")[1]
       "<a href='#{file}' data-line='#{line}' data-file='#{file}'>#{match}</a>"
